@@ -1,6 +1,10 @@
-hash: 0d0b010ce6ed6aecad69d4b07587c8ed8583120c1423c70032e77460d47437d8
-updated: 2017-05-03T15:34:09.727928304+05:30
+hash: 26fc133dd35ccc5202073af0a9d0f9b85e3a6ffd85bdb2d1c226f1a0e738b3a5
+updated: 2017-05-03T16:26:15.0645155+05:30
 imports:
+- name: github.com/ajanicij/goduckgo
+  version: 61f9a275272fdda937276765b8bc69f5e2310a8f
+  subpackages:
+  - /goduckgo
 - name: github.com/gorilla/context
   version: 08b5f424b9271eedf6f9f0ce86cb9396ed337a42
 - name: github.com/gorilla/mux

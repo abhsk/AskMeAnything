@@ -3,7 +3,11 @@ package telegram
 import (
 	"fmt"
 	"net/http"
+	"regexp"
 	"strconv"
+	"strings"
+
+	duck "github.com/ajanicij/goduckgo/goduckgo"
 )
 
 type Bot struct {
@@ -12,9 +16,13 @@ type Bot struct {
 
 func (b *Bot) Respond(message *Message) {
 	chatId := strconv.Itoa(message.Chat.Id)
-	msg := "Hello " + message.From.FirstName + "reply for " + message.Text
 
-	b.Reply(chatId, msg)
+	matched, _ := regexp.MatchString("^(/)*search ", message.Text)
+	if matched == true {
+		b.Reply(chatId, Search(strings.SplitN(message.Text, "search ", 2)[1]))
+		return
+	}
+	b.Reply(chatId, "We do not support this yet")
 }
 
 func (b *Bot) Reply(chatId, message string) {
@@ -30,4 +38,13 @@ func (b *Bot) Reply(chatId, message string) {
 	if e != nil {
 		fmt.Println("e", e, url)
 	}
+}
+
+func Search(msg string) string {
+	message, _ := duck.Query(msg)
+	if len(message.RelatedTopics) > 0 {
+		result := message.RelatedTopics[0]
+		return message.Heading + " : " + result.Text
+	}
+	return "Not found"
 }
