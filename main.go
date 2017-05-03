@@ -35,14 +35,14 @@ func MessageHandler(bot *telegram.Bot) http.HandlerFunc {
 			fmt.Println("err: ", err)
 		}
 		fmt.Println("body: ", string(body))
-		message := &telegram.Message{}
-		err = json.Unmarshal(body, r)
+		response := &telegram.Response{}
+		err = json.Unmarshal(body, response)
 		if err != nil {
 			fmt.Println("err: ", err)
 		}
-		fmt.Println("message: ", message.Text)
+		fmt.Println("message: ", response)
 
-		bot.Respond(message)
+		bot.Respond(response.Message)
 	}
 }
 

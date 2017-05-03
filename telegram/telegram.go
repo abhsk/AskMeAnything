@@ -10,6 +10,10 @@ const (
 	SEND = "/sendmessage"
 )
 
+type Response struct {
+	Message *Message
+}
+
 type Message struct {
 	Id   int    `json:"message_id"`
 	From User   `json:"from"`
