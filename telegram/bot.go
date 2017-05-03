@@ -17,24 +17,25 @@ type Bot struct {
 func (b *Bot) Respond(message *Message) {
 	chatId := strconv.Itoa(message.Chat.Id)
 
-	matched, _ := regexp.MatchString("^(/)*echo ", message.Text)
+	request_message := strings.TrimSpace(message.Text)
+	response_message := "We do not support this yet"
+
+	matched, _ := regexp.MatchString("^(/)*echo", request_message)
 	if matched == true {
-		b.Reply(chatId, strings.SplitN(message.Text, "echo  ", 2)[1])
-		return
+		response_message = strings.SplitN(request_message, "echo", 2)[1]
 	}
 
-	matched, _ = regexp.MatchString("^(/)*ping ", message.Text)
+	matched, _ = regexp.MatchString("^(/)*ping", request_message)
 	if matched == true {
-		b.Reply(chatId, "Pong")
-		return
+		response_message = "pong"
 	}
 
-	matched, _ = regexp.MatchString("^(/)*search ", message.Text)
+	matched, _ = regexp.MatchString("^(/)*search", request_message)
 	if matched == true {
-		b.Reply(chatId, Search(strings.SplitN(message.Text, "search ", 2)[1]))
-		return
+		response_message = Search(strings.SplitN(request_message, "search", 2)[1])
 	}
-	b.Reply(chatId, "We do not support this yet")
+
+	b.Reply(chatId, response_message)
 }
 
 func (b *Bot) Reply(chatId, message string) {
