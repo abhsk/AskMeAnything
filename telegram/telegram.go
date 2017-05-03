@@ -37,6 +37,7 @@ func (b *Bot) Respond(message *Message) {
 	msg := "Hello " + message.From.FirstName + "reply for " + message.Text
 
 	url := b.URL + SEND + "?chat_id=" + chatId + "&text=" + msg
+	fmt.Println(url)
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		fmt.Println("err", err)
