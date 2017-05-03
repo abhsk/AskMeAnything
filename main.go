@@ -1,14 +1,12 @@
 package main
 
 import (
-	"encoding/json"
-	"fmt"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
 
-	"github.com/abhsk/AskMeAnything/telegram"
+	h "github.com/abhsk/AskMeAnything/handlers"
+	t "github.com/abhsk/AskMeAnything/telegram"
 
 	"github.com/gorilla/mux"
 )
@@ -18,44 +16,17 @@ const (
 	APIKEY  = "351267960:AAFfApJepRNqFGGKaUcd30xkWoGFD2I118E"
 )
 
-func IndexHandler() http.HandlerFunc {
-	//"message":{
-	// "message_id":271,"from":{"id":35364348,"first_name":"Abhishek","last_name":"Pradhan"},
-	// "chat":{"id":35364348,"first_name":"Abhishek","last_name":"Pradhan","type":"private"},
-	// "date":1493803385,"text":"/ping","entities":[{"type":"bot_command","offset":0,"length":5}]}}
-	return func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "Welcome to AskMeAnything")
-	}
-}
-
-func MessageHandler(bot *telegram.Bot) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		body, err := ioutil.ReadAll(r.Body)
-		if err != nil {
-			fmt.Println("err: ", err)
-		}
-		fmt.Println("body: ", string(body))
-		response := &telegram.Response{}
-		err = json.Unmarshal(body, response)
-		if err != nil {
-			fmt.Println("err: ", err)
-		}
-		fmt.Println("message: ", response)
-
-		bot.Respond(response.Message)
-	}
-}
-
 func main() {
-	bot := &telegram.Bot{
+	bot := &t.Bot{
 		URL: BASEURL + APIKEY,
 	}
 
 	r := mux.NewRouter()
 	// Routes consist of a path and a handler function.
-	r.HandleFunc("/", IndexHandler()).Methods("GET")
-	r.HandleFunc("/message", MessageHandler(bot)).Methods("POST")
+	r.HandleFunc("/", h.IndexHandler()).Methods("GET")
+	r.HandleFunc("/message", h.MessageHandler(bot)).Methods("POST")
 
 	// Bind to a port and pass our router in
-	log.Fatal(http.ListenAndServe(":"+os.Getenv("PORT"), r))
+	port := ":" + os.Getenv("PORT")
+	log.Fatal(http.ListenAndServe(port, r))
 }
