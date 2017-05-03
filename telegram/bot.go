@@ -17,7 +17,19 @@ type Bot struct {
 func (b *Bot) Respond(message *Message) {
 	chatId := strconv.Itoa(message.Chat.Id)
 
-	matched, _ := regexp.MatchString("^(/)*search ", message.Text)
+	matched, _ := regexp.MatchString("^(/)*echo ", message.Text)
+	if matched == true {
+		b.Reply(chatId, strings.SplitN(message.Text, "echo  ", 2)[1])
+		return
+	}
+
+	matched, _ = regexp.MatchString("^(/)*ping ", message.Text)
+	if matched == true {
+		b.Reply(chatId, "Pong")
+		return
+	}
+
+	matched, _ = regexp.MatchString("^(/)*search ", message.Text)
 	if matched == true {
 		b.Reply(chatId, Search(strings.SplitN(message.Text, "search ", 2)[1]))
 		return
