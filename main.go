@@ -34,11 +34,13 @@ func MessageHandler(bot *telegram.Bot) http.HandlerFunc {
 		if err != nil {
 			fmt.Println("err: ", err)
 		}
+		fmt.Println("body: ", string(body))
 		message := &telegram.Message{}
 		err = json.Unmarshal(body, r)
 		if err != nil {
 			fmt.Println("err: ", err)
 		}
+		fmt.Println("message: ", message.Text)
 
 		bot.Respond(message)
 	}
